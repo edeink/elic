@@ -120,17 +120,20 @@
                     setTimeout(() => {
                         this.isActive = true;
                         this.calcContent();
-                    }, 50);
+                    });
                 } else {
                     this.isActive = false;
                     setTimeout(() => {
                         this.isRealShow = false;
-                    }, 300);
+                    }, 200);
                 }
             },
             noScroll() {
                 this.$nextTick(() => {
-                    let parent = this.parentContainer || this.findParenContainer();
+                    if(!this.parentContainer) {
+                        this.parentContainer = this.findParenContainer();
+                    }
+                    let parent = this.parentContainer;
                     if(parent.style.position !== 'fixed') {
                         let scrollY = window.scrollY;
                         let pStyle = parent.style;
@@ -152,13 +155,22 @@
                 this.lockScroll = 0;
             },
             findParenContainer() {
-                let parent = this.$refs.page.parentElement;
-                let body = document.body;
-                while(parent !== body && parent.className.indexOf('eli-page') === -1) {
-                    parent = parent.parentElement;
+                let parent = this.$parent;
+                while (parent) {
+                    if (parent.$options.name !== 'Page') {
+                        parent = parent.$parent;
+                    } else {
+                        return parent.$el;
+                    }
                 }
-                this.parentContainer = parent;
-                return parent;
+                return document.body;
+                // let parent = this.$parent;
+                // let body = document.body;
+                // while(parent !== body && parent.$options.indexOf('eli-page') === -1) {
+                //     parent = parent.parentElement;
+                // }
+                // this.parentContainer = parent;
+                // return parent;
             }
         }
     }
@@ -183,7 +195,7 @@
         z-index: 10;
         transition: opacity .2s ease-in-out;
         &.is-active {
-            opacity: .3;
+            opacity: .2;
         }
     }
     h2 {
@@ -219,17 +231,21 @@
             bottom: 0;
             width: 100%;
             height: 0;
-            box-shadow: 0 0 10px #999;
+            box-shadow: none;
             transition: height .3s cubic-bezier(.4,0,0,1), transform .3s cubic-bezier(.4,0,0,1);
             transform: translateY(100%);
             &.is-active {
                 height: 75vh;
                 transform: translateY(0);
+                box-shadow: 0 0 10px #999;
                 &.is-full {
                     height: 100vh;
                 }
-                &.is-fit {
-                    height: auto;
+            }
+            &.is-fit {
+                height: auto;
+                &.is-active {
+                    transform: translateY(0);
                 }
             }
         }

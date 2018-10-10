@@ -28,17 +28,20 @@
                 <h2>What's Elic</h2>
             </template>
             <template slot="content">
-                <p>一个简洁的组件库</p>
-                <p>包含最基本的组件</p>
-                <p>参考Material Design原则</p>
-                <p>采用黑白灰的色调</p>
-                <p>这就是它的全部，希望你喜欢</p>
-                <p style="text-align: right">-- by edeity</p>
+                <div class="elic-desc">
+                    <p>一个简洁的组件库</p>
+                    <p>包含最基本的组件</p>
+                    <p>参考Material Design原则</p>
+                    <p>采用黑白灰的色调</p>
+                    <p>这就是它的全部，希望你喜欢</p>
+                    <p style="text-align: right">-- by edeity</p>
+                </div>
             </template>
             <template slot="foot">
                 <EdLine label="See more on Github" @click="openLink('https://www.github.com/edeity', true)"></EdLine>
             </template>
         </Page>
+        <!--按钮-->
         <Page :isShow="isButtonPanel" :isBuiltIn="true" title="按钮" @back="()=>{this.isButtonPanel = false;}">
             <h3>常规</h3>
             <Button isShadow>Shadow</Button>
@@ -51,22 +54,47 @@
                 <Button>Group 3</Button>
             </ButtonGroup>
         </Page>
-        <!--输入框弹窗-->
-        <Page :isShow="isInputPanel" :isBuiltIn="true" title="输入" @back="()=>{setInputPanel(false)}">
-            <h3>有标签</h3>
-            <Input label="用户名" tips="用户名"/>
-            <Input label="密码" tips="密码" type="password"/>
-            <h3>无标签</h3>
-            <Input tips="用户名"/>
-            <h3>浮动型</h3>
-            <Input tips="用户名" :isFloat="true"/>
+        <!--手风琴-->
+        <Page :isShow="isAccordion" :isBuiltIn="true" title="手风琴" @back="setAccordionPanel(false)">
+            <Accordion defaultActiveKey="accordion2">
+                <AccordionPane title="Five score years ago" id="accordion1">
+                    <p>Five score years ago, a great American, in whose symbolic shadow we stand today, signed the Emancipation Proclamation. This momentous decree came as a great beacon light of hope to millions of Negro slaves who had been seared in the flames of withering injustice. It came as a joyous daybreak to end the long night of bad captivity.</p>
+                </AccordionPane>
+                <AccordionPane title="But one hundred years later" id="accordion2">
+                    <p>But one hundred years later, the Negro still is not free. One hundred years later, the life of the Negro is still sadly crippled by the manacles of segregation and the chains of discrimination. One hundred years later, the Negro lives on a lonely island of poverty in the midst of a vast ocean of material prosperity. One hundred years later, the Negro is still languished in the corners of American society and finds himself an exile in his own land. So we’ve come here today to dramatize a shameful condition.</p>
+                </AccordionPane>
+                <AccordionPane title="I am not unmindful that" id="accordion3">
+                    <p>I am not unmindful that some of you have come here out of great trials and tribulations. Some of you have come fresh from narrow jail cells. Some of you have come from areas where your quest for freedom left you battered by the storms of persecution and staggered by the winds of police brutality. You have been the veterans of creative suffering. Continue to work with the faith that unearned suffering is redemptive.</p>
+                </AccordionPane>
+                <AccordionPane title="Go back to Mississippi" id="accordion4">
+                    <p>Go back to Mississippi, go back to Alabama, go back to South Carolina, go back to Georgia, go back to Louisiana, go back to the slums and ghettos of our northern cities, knowing that somehow this situation can and will be changed. Let us not wallow in the valley of despair.
+                        I say to you today, my friends, so even though we face the difficulties of today and tomorrow, I still have a dream. It is a dream deeply rooted in the American dream.</p>
+                </AccordionPane>
+            </Accordion>
+        </Page>
+        <!--弹窗层-->
+        <Page :isShow="isDialogPanel" :isBuiltIn="true" title="模态框" @back="()=>{setDialogPanel(false)}">
+            <EdLine label="Tips" item="tips" @click="openDialog('Say Hello !')"/>
+            <EdLine label="alert" item="alert" @click="openDialog('Say Hello !', 'alert')"/>
+            <EdLine label="Confirm" item="confirm" @click="openDialog('Are you sure ?', 'confirm')"/>
+            <EdLine label="Toast" item="toast" @click="openDialog('Say Hello !', 'toast')"/>
+            <EdLine label="Loading" item="loading" @click="openLoading"/>
+        </Page>
+        <!--列表-->
+        <Page :isShow="isLinePanel" :isBuiltIn="true" title="列表" @back="()=>{setLinePanel(false)}">
+            <EdLine label="列表" item="副标题" noRightIcon/>
+            <EdLine label="列表" item="副标题"/>
+            <EdLine label="列表" item="副标题" iconClass="icon-icon_note"/>
+            <EdLine label="列表">
+                <div slot="item">ITEM SLOT</div>
+            </EdLine>
         </Page>
         <!--滑动层弹窗-->
         <Page :isShow="isPagePanel" :isBuiltIn="true" title="滑动窗口" @back="()=>{setPagePanel(false)}">
             <EdLine label="Page" item="Bottom To Top" @click="openPage('btt')"/>
             <EdLine label="Page" item="Right to Left" @click="openPage('rtl')"/>
             <EdLine label="Page" item="Left to Right" @click="openPage('ltr')"/>
-
+            <EdLine label="Page" item="Fix" @click="openPage('btt', true)"/>
             <Page :isFull="false"
                   :isShow="isPage"
                   :isFit="isPageFit"
@@ -97,15 +125,16 @@
                 <Button @click="removeItem">removeItem</Button>
             </ButtonGroup>
         </Page>
-        <!--弹窗层-->
-        <Page :isShow="isDialogPanel" :isBuiltIn="true" title="模态框" @back="()=>{setDialogPanel(false)}">
-            <EdLine label="Tips" item="tips" @click="openDialog('Say Hello !')"/>
-            <EdLine label="alert" item="alert" @click="openDialog('Say Hello !', 'alert')"/>
-            <EdLine label="Confirm" item="confirm" @click="openDialog('Are you sure ?', 'confirm')"/>
-            <EdLine label="Toast" item="toast" @click="openDialog('Say Hello !', 'toast')"/>
+        <!--输入框弹窗-->
+        <Page :isShow="isInputPanel" :isBuiltIn="true" title="输入" @back="()=>{setInputPanel(false)}">
+            <h3>有标签</h3>
+            <Input label="用户名" tips="用户名"/>
+            <Input label="密码" tips="密码" type="password"/>
+            <h3>无标签</h3>
+            <Input tips="用户名"/>
+            <h3>浮动型</h3>
+            <Input tips="用户名" :isFloat="true"/>
         </Page>
-        <Dialog :type="dialogType" :isShow="isDialog" :text="dialogText"
-                @close="hideDialog" @yes="sayYes" @no="sayNo"/>
         <!--页签层-->
         <Page :isShow="isTabPanel" :isBuiltIn="true" title="页签" @back="()=>{setTabPanel(false)}">
             <Tabs>
@@ -136,36 +165,40 @@
                 <Rate slot="item" :rate="formRate"/>
             </EdLine>
             <EdLine label="选项">
-                <Select slot="item" :default-value="formRate" :options="[1, 2, 3, 4.5, 5]" @afterSelect="(value)=>{formRate=value}"/>
+                <Select slot="item" :defaultValue="formRate"
+                        :options="[1, 2, 3, 4.5, 5]" @afterSelect="(value)=>{formRate=value}"/>
+            </EdLine>
+            <EdLine label="选择[Radio]">
+                <Radio slot="item" label="Ratio"></Radio>
+            </EdLine>
+            <EdLine label="选择[组]">
+                <RadioGroup slot="item" :isMulti="false">
+                    <Radio label="c1"></Radio>
+                    <Radio label="c2"></Radio>
+                    <Radio label="c3"></Radio>
+                </RadioGroup>
+            </EdLine>
+            <EdLine label="选择[Checkbox]">
+                <Radio slot="item" label="Radio" type="checkbox"></Radio>
+            </EdLine>
+            <EdLine label="选择[单选]">
+                <RadioGroup slot="item" :isMulti="false">
+                    <Radio label="c1" type="checkbox"></Radio>
+                    <Radio label="c2" type="checkbox"></Radio>
+                    <Radio label="c3" type="checkbox"></Radio>
+                </RadioGroup>
+            </EdLine>
+            <EdLine label="选择[多选]">
+                <RadioGroup slot="item" :isMulti="true">
+                    <Radio label="c1" type="checkbox"></Radio>
+                    <Radio label="c2" type="checkbox"></Radio>
+                    <Radio label="c3" type="checkbox"></Radio>
+                </RadioGroup>
             </EdLine>
         </Page>
-        <!--手风琴-->
-        <Page :isShow="isAccordion" :isBuiltIn="true" title="手风琴" @back="setAccordionPanel(false)">
-            <Accordion defaultActiveKey="accordion2">
-                <AccordionPane title="Five score years ago" id="accordion1">
-                    <p>Five score years ago, a great American, in whose symbolic shadow we stand today, signed the Emancipation Proclamation. This momentous decree came as a great beacon light of hope to millions of Negro slaves who had been seared in the flames of withering injustice. It came as a joyous daybreak to end the long night of bad captivity.</p>
-                </AccordionPane>
-                <AccordionPane title="But one hundred years later" id="accordion2">
-                    <p>But one hundred years later, the Negro still is not free. One hundred years later, the life of the Negro is still sadly crippled by the manacles of segregation and the chains of discrimination. One hundred years later, the Negro lives on a lonely island of poverty in the midst of a vast ocean of material prosperity. One hundred years later, the Negro is still languished in the corners of American society and finds himself an exile in his own land. So we’ve come here today to dramatize a shameful condition.</p>
-                </AccordionPane>
-                <AccordionPane title="I am not unmindful that" id="accordion3">
-                    <p>I am not unmindful that some of you have come here out of great trials and tribulations. Some of you have come fresh from narrow jail cells. Some of you have come from areas where your quest for freedom left you battered by the storms of persecution and staggered by the winds of police brutality. You have been the veterans of creative suffering. Continue to work with the faith that unearned suffering is redemptive.</p>
-                </AccordionPane>
-                <AccordionPane title="Go back to Mississippi" id="accordion4">
-                    <p>Go back to Mississippi, go back to Alabama, go back to South Carolina, go back to Georgia, go back to Louisiana, go back to the slums and ghettos of our northern cities, knowing that somehow this situation can and will be changed. Let us not wallow in the valley of despair.
-                        I say to you today, my friends, so even though we face the difficulties of today and tomorrow, I still have a dream. It is a dream deeply rooted in the American dream.</p>
-                </AccordionPane>
-            </Accordion>
-        </Page>
-        <!--列表-->
-        <Page :isShow="isLinePanel" :isBuiltIn="true" title="列表" @back="()=>{setLinePanel(false)}">
-            <EdLine label="列表" item="副标题" noRightIcon/>
-            <EdLine label="列表" item="副标题"/>
-            <EdLine label="列表" item="副标题" iconClass="icon-icon_note"/>
-            <EdLine label="列表">
-                <div slot="item">ITEM SLOT</div>
-            </EdLine>
-        </Page>
+        <!--c:Dialog-->
+        <Dialog :type="dialogType" :isShow="isDialog" :text="dialogText"
+                @close="hideDialog" @yes="sayYes" @no="sayNo"/>
     </div>
 </template>
 
@@ -188,6 +221,8 @@
     import Rate from './components/Rate';
     import Accordion from './components/Accordion';
     import AccordionPane from './components/AccordionPane';
+    import Radio from './components/Radio';
+    import RadioGroup from './components/RadioGroup';
     // 其他工具类
     import u from './components/libs/utils';
 
@@ -210,7 +245,9 @@
             Select,
             Rate,
             Accordion,
-            AccordionPane
+            AccordionPane,
+            Radio,
+            RadioGroup
         },
         data() {
             return {
@@ -233,7 +270,7 @@
                 isDialog: false,
                 dialogType: false,
                 dialogText: '',
-                formRate: 3
+                formRate: 3,
             }
         },
         methods: {
@@ -292,6 +329,12 @@
                 this.dialogText = dialogText;
                 this.dialogType = dialogType;
                 this.isDialog = true;
+            },
+            openLoading() {
+                this.openDialog('Loading...', 'load');
+                setTimeout(()=>{
+                    this.isDialog = false
+                }, 2000);
             },
             hideDialog() {
                 this.isDialog = false;
@@ -357,6 +400,9 @@
             font-size: 30px;
             background: #f1f1f1;
             color: #888;
+        }
+        .elic-desc {
+            color: #666;
         }
     }
 </style>

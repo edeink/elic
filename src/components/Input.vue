@@ -79,7 +79,7 @@
             outline-style: none;
             text-align: left;
             font-size: 12px;
-            transition: top .2s ease-in-out;
+            transition: top .2s ease-in-out, height .2s ease-in-out;
             &.has-label {
                 width: calc(100% - 100px);
             }
@@ -96,11 +96,10 @@
             padding: 0;
             margin: 0;
             color: #999;
-            transition: top .2s ease-in-out, font-size .2s ease-in-out;
+            transition: transform .2s ease-in-out;
             z-index: -1;
             &.float {
-                top: -8px;
-                font-size: 10px;
+                transform: translate(-4px, -8px) scale(0.8);
             }
         }
         .clear-btn {

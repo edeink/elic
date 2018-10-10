@@ -1,9 +1,11 @@
 <template>
     <div class="select">
-        <div class="select-value"
-             @click.prevent="toggleSelectPanel">{{ selectData }}</div>
+        <input class="select-value"
+               ref="input"
+               @blur="toggleSelectPanel(false)"
+               @focus="toggleSelectPanel(true)" :value="selectData "/>
         <i class="select-btn iconfont icon-icon_down"
-           @click.prevent="toggleSelectPanel"
+           @click.prevent="toggleFocusSelectPanel"
            :class="{down: isSelect}"></i>
         <ul class="select-panel"
             :class="{down: isSelect}"
@@ -13,12 +15,14 @@
                 class="select-option"
                 :class="{'is-active': selectData === option}"
                 :key="index"
-                @click="afterSelect(option)">{{option.value ? option.value : option}}</li>
+                @click="afterSelect(option)">{{option.value ? option.value : option}}
+            </li>
         </ul>
     </div>
 </template>
 <script>
     import Icon from './NavIcon';
+
     export default {
         name: 'Select',
         components: {
@@ -35,14 +39,14 @@
             options: {
                 Type: Array
             },
-            defaultValue: {
-
-            }
+            defaultValue: {}
+        },
+        created() {
+            this.selectData = this.defaultValue;
         },
         mounted() {
-            this.selectData = this.defaultValue;
             let childNodes = this.$refs.selectPanel.childNodes;
-            if(childNodes) {
+            if (childNodes) {
                 let downHeight = 0;
                 childNodes.forEach((eachNode) => {
                     downHeight += eachNode.clientHeight;
@@ -51,8 +55,16 @@
             }
         },
         methods: {
-            toggleSelectPanel() {
-                this.isSelect = !this.isSelect;
+            toggleFocusSelectPanel() {
+                if(this.isSelect) {
+                    this.$refs.input.blur();
+                } else {
+                    this.$refs.input.focus();
+                }
+
+            },
+            toggleSelectPanel(isSelect) {
+                this.isSelect = isSelect;
             },
             afterSelect(value) {
                 this.selectData = value;
@@ -76,6 +88,7 @@
             width: 100%;
             height: 100%;
             padding-left: 10px;
+            outline: none;
         }
         .select-btn {
             position: absolute;
@@ -112,7 +125,7 @@
                 border-top: 1px solid #eaeaea;
                 overflow: auto;
                 /*box-shadow: 0 2px 4px rgba(0,0,0,0.2);*/
-                box-shadow: 0 2px 6px rgba(0,0,0,.25), 0 1px 1px rgba(0,0,0,.15);
+                box-shadow: 0 2px 6px rgba(0, 0, 0, .25), 0 1px 1px rgba(0, 0, 0, .15);
             }
             .select-option {
                 display: block;

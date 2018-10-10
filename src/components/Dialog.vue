@@ -1,12 +1,17 @@
 <template>
     <div class="dialog" v-if="isRealShow">
-        <div class="dialog-bg" v-if="type !== 'toast'"></div>
+        <div class="dialog-bg" v-if="!isSimple"></div>
         <div class="dialog-content animated"
              :class="[type,
-             {fadeIn: isIn && type === 'toast', fadeOut: isOut && type === 'toast'},
-             {bounceIn: isIn && type !== 'toast', bounceOut: isOut && type !== 'toast'}]">
+             {fadeIn: isIn && isSimple, fadeOut: isOut && isSimple},
+             {bounceIn: isIn && !isSimple, bounceOut: isOut && !isSimple}]">
             <i class="dialog-close-btn iconfont icon-icon_close_"
-               @click="close" v-if="type!=='toast'"></i>
+               @click="close" v-if="!isSimple"></i>
+            <!--loading-->
+            <div class="spinner" v-if="type === 'load'">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
             <span class="dialog-text">{{ text }}</span>
             <div class="answer" v-if="type==='alert'">
                 <a class="yes" @click="yes">OK</a>
@@ -37,6 +42,11 @@
             },
             type: {
                 Type: String
+            }
+        },
+        computed: {
+            isSimple() {
+                return this.type === 'toast' || this.type === 'load';
             }
         },
         watch: {
@@ -106,9 +116,10 @@
         border-radius: 5px;
         z-index: 21;
         &.toast {
+            min-width: 160px;
             color: white;
             background-color: #444;
-            padding: 16px;
+            padding: 8px;
             text-align: center;
         }
         &.alert {
@@ -116,6 +127,12 @@
         }
         &.confirm {
             padding: 24px 24px 16px;
+        }
+        &.load {
+            min-width: auto;
+            padding: 8px;
+            background: transparent;
+            text-align: center;
         }
         .dialog-close-btn {
             position: absolute;
@@ -228,5 +245,47 @@
         to {
             opacity: 0;
         }
+    }
+</style>
+<style>
+    .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 8px;
+        position: relative;
+    }
+
+    .double-bounce1, .double-bounce2 {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: #999;
+        opacity: 0.6;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+        animation: sk-bounce 2.0s infinite ease-in-out;
+    }
+
+    .double-bounce2 {
+        -webkit-animation-delay: -1.0s;
+        animation-delay: -1.0s;
+    }
+
+    @-webkit-keyframes sk-bounce {
+        0%, 100% { -webkit-transform: scale(0.0) }
+        50% { -webkit-transform: scale(1.0) }
+    }
+
+    @keyframes sk-bounce {
+        0%, 100% {
+            transform: scale(0.0);
+            -webkit-transform: scale(0.0);
+        } 50% {
+              transform: scale(1.0);
+              -webkit-transform: scale(1.0);
+          }
     }
 </style>
