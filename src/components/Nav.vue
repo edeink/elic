@@ -2,15 +2,17 @@
     <nav>
         <div class="placeholder-nav"></div>
         <div class="real-nav">
-            <div class="left-icon-container">
-                <Icon iconClass="icon-icon_list" @click="leftClick"/>
+            <div class="left-icon-container" v-if="leftIcon">
+                <Icon :iconClass="leftIcon" @click="leftClick"/>
             </div>
             <div class="title-container">
                 <h1>Elic</h1>
             </div>
-            <div class="right-icon-container">
+            <div class="right-icon-container" v-if="rightIconArray">
                 <ul class="nav-icon-list">
-                    <li><Icon iconClass="icon-icon_search"/></li>
+                    <li v-for="(eachIcon, index) in rightIconArray" :key="index">
+                        <Icon :iconClass="eachIcon"/>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -26,9 +28,9 @@
         },
         props: {
             leftIcon: {
-                type: Array
+                type: String
             },
-            rightIcon: {
+            rightIconArray: {
                 type: Array
             }
         },

@@ -1,6 +1,6 @@
 <template>
     <div class="accordion-pane">
-        <div class="pane-title">{{title}}
+        <div class="pane-title" :class="{'is-active': isActive}">{{title}}
             <a class="icon-btn"
                :class="{'is-active': isActive}"
                @click="toggle(id)">
@@ -61,6 +61,11 @@
             line-height: 40px;
             margin: 0 16px;
             border-bottom: 1PX solid #eaeaea;
+            opacity: .6;
+            transition: opacity .3s ease-in-out;
+            &.is-active {
+                opacity: 1;
+            }
             .icon-btn {
                 width: 40px;
                 height: 40px;

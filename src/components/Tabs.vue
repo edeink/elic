@@ -101,12 +101,16 @@
 </script>
 <style lang="less" scoped>
     .tabs {
+        position: relative;
+        // background: #f1f1f1;
         .tab-nav {
             position: relative;
             display: block;
             width: 100%;
             border-bottom: 1PX solid #eaeaea;
+            background:white;
             white-space: nowrap;
+            overflow: hidden;
             &.is-scroll {
                 padding: 0 30px;
             }

@@ -1,9 +1,10 @@
 <template>
     <div id="app">
         <Nav @leftClick="setNavDialog(true)"
-             :leftIcon="['icon-icon_list']"
-             :rightIcon="['icon-icon_search,icon-icon_wishlist,icon-icon_shoppingcart_a']"
+             leftIcon="icon-icon_list"
         />
+        <!-- :rightIconArray="['icon-icon_search','icon-icon_wishlist','icon-icon_shoppingcart_a']" -->
+       
         <h3>基础</h3>
         <div>
             <EdLine label="Button" item="按钮" @click="setButtonPanel(true)"/>
@@ -38,7 +39,7 @@
                 </div>
             </template>
             <template slot="foot">
-                <EdLine label="See more on Github" @click="openLink('https://www.github.com/edeity', true)"></EdLine>
+                <EdLine label="See more on Github" @click="openLink('https://github.com/edeity/elic', true)"></EdLine>
             </template>
         </Page>
         <!--按钮-->

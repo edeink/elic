@@ -88,6 +88,7 @@
             width: 100%;
             height: 100%;
             padding-left: 10px;
+            border: none;
             outline: none;
         }
         .select-btn {
